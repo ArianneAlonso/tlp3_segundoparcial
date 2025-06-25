@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detección de Anemia</title>
+  <style>
+    :root {
+      --rojo-vino: #8B1E3F;
+      --rosa-claro: #F9D2DC;
+      --rosa-fondo: #FAE8ED;
+      --gris-texto: #3A3A3A;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--rosa-fondo);
+      color: var(--gris-texto);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      grid-template-areas:
+        "header header"
+        "sidebar content";
+      gap: 20px;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    header {
+      grid-area: header;
+      background-color: var(--rosa-claro);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px dashed var(--rojo-vino);
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      margin: 0;
+      color: var(--rojo-vino);
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .side-btn {
+      background-color: var(--rosa-claro);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 2px 2px 4px #d2b59b;
+      transition: background-color 0.3s;
+      color: var(--rojo-vino);
+    }
+
+    .side-btn:hover {
+      background-color: #f8c0cb;
+    }
+
+    .content {
+      grid-area: content;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #fff0f0;
+      border: 2px dashed var(--rojo-vino);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 6px #eac1c1;
+    }
+
+    .card-text h2 {
+      font-size: 1.2rem;
+      margin: 0 0 10px 0;
+      color: var(--rojo-vino);
+    }
+
+    .card-text p, .card-text ul {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid var(--rojo-vino);
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--rosa-claro);
+      color: var(--rojo-vino);
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    form input, form select {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      border: 1px solid var(--rojo-vino);
+      border-radius: 5px;
+    }
+
+    form button {
+      margin-top: 15px;
+      padding: 8px 12px;
+      border: none;
+      background-color: var(--rojo-vino);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .resultado-box h3,
+    .resultado-box p,
+    .card-text h3 {
+      color: var(--rojo-vino);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Detección de Anemia</h1>
+      <p>Aplicación educativa y predictiva sobre anemia.</p>
+    </header>
+
+    <aside class="sidebar">
+      <button class="side-btn" onclick="showSection('info')">Información</button>
+      <button class="side-btn" onclick="showSection('pred')">Predicción</button>
+      <button class="side-btn" onclick="showSection('tips')">Consejos</button>
+    </aside>
+
+    <main class="content">
+      <section class="card" id="info-section">
+        <div class="card-text">
+          <h2>¿Qué es la anemia? <span>Concepto general</span></h2>
+          <p>La anemia es una condición en la cual disminuye la cantidad de glóbulos rojos o la hemoglobina en la sangre, lo que provoca fatiga, debilidad y otros síntomas.</p>
+        </div>
+        <div class="card-text">
+          <h2>Tipos y síntomas <span>Identificación y signos</span></h2>
+          <p>Existen varios tipos de anemia: ferropénica, perniciosa, aplásica, entre otras. Los síntomas comunes incluyen mareos, piel pálida, palpitaciones y cansancio persistente.</p>
+        </div>
+        <div class="card-text">
+          <h2>Valores normales de referencia</h2>
+          <table>
+            <tr><th>Variable</th><th>Rango Normal</th></tr>
+            <tr><td>Hemoglobina</td><td>12–16 g/dL (Mujeres) / 13–17 g/dL (Hombres)</td></tr>
+            <tr><td>MCH</td><td>27–33 pg</td></tr>
+            <tr><td>MCHC</td><td>32–36 g/dL</td></tr>
+            <tr><td>MCV</td><td>80–100 fL</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="card hidden" id="pred-section">
+        <div class="card-text">
+          <h2>Ingresá tus datos</h2>
+          <form method="POST" action="/predict">
+            <label for="gender">Género:</label>
+            <select id="gender" name="gender" required>
+              <option value="Femenino">Femenino</option>
+              <option value="Masculino">Masculino</option>
+            </select>
+
+            <label for="hb">Hemoglobina (g/dL):</label>
+            <input type="number" id="hb" name="hb" step="0.1" required />
+
+            <label for="mch">MCH:</label>
+            <input type="number" id="mch" name="mch" step="0.1" required />
+
+            <label for="mchc">MCHC:</label>
+            <input type="number" id="mchc" name="mchc" step="0.1" required />
+
+            <label for="mcv">MCV:</label>
+            <input type="number" id="mcv" name="mcv" step="0.1" required />
+
+            <button type="submit">Predecir</button>
+          </form>
+
+          {% if prediction %}
+            <div class="resultado-box" style="margin-top: 20px; padding: 10px; border: 1px solid var(--rojo-vino); border-radius: 8px; background: #ffe6ea;">
+              <h3>Resultado de la predicción</h3>
+              <p>Probabilidad de anemia: {{ probabilidad }}</p>
+              <p>Clasificación: <strong>{{ clasificacion }}</strong></p>
+            </div>
+          {% endif %}
+
+          {% if loss_img %}
+            <div class="resultado-box" style="margin-top: 20px;">
+              <h3>Gráfico de pérdida</h3>
+              <img src="data:image/png;base64,{{ loss_img }}" alt="Gráfico de pérdida" style="width:100%; max-width:500px;"/>
+            </div>
+          {% endif %}
+
+          {% if reg_img %}
+            <div class="resultado-box" style="margin-top: 20px;">
+              <h3>Gráfico de regresión logística</h3>
+              <img src="data:image/png;base64,{{ reg_img }}" alt="Gráfico de regresión logística" style="width:100%; max-width:500px;"/>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="card hidden" id="tips-section">
+        <div class="card-text">
+          <h2>Consejos para prevenir la anemia</h2>
+          <p>Para prevenir la anemia es importante consumir alimentos ricos en hierro como hígado, carne roja o espinaca, y acompañarlos con vitamina C para mejorar su absorción. También se recomienda evitar el exceso de café o té durante las comidas, ya que pueden reducir la absorción del hierro, y realizar controles médicos periódicos si se presentan síntomas persistentes.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function showSection(id) {
+      document.getElementById('info-section').classList.add('hidden');
+      document.getElementById('pred-section').classList.add('hidden');
+      document.getElementById('tips-section').classList.add('hidden');
+
+      if (id === 'info') document.getElementById('info-section').classList.remove('hidden');
+      if (id === 'pred') document.getElementById('pred-section').classList.remove('hidden');
+      if (id === 'tips') document.getElementById('tips-section').classList.remove('hidden');
+    }
+
+    showSection('{{ section }}');
+  </script>
+</body>
+</html>
